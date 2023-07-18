@@ -1,23 +1,14 @@
 ---
-- name: dynatrace demo
+- name: Listen for newly created Namespace
   hosts: all
   sources:
-    - name: alertmanager
-      ansible.eda.alertmanager:
-        host: 0.0.0.0
-        port: 5050
-        data_alerts_path:
-        data_host_path: ImpactedEntityNames
-        skip_original_data: true
-      filters:
-        - ansible.eda.json_filter:
-            exclude_keys:
-              - ProblemDetailsMarkdown
-              - ProblemDetailsText
-              - ProblemDetailsJSON
+    - sabre1041.eda.k8s:
+        api_version: v1
+        kind: Namespace
   rules:
-    - name: restart process
-      condition: event.alert.ProblemTitle == "No process found for rule pythonmain" and event.alert.State == "OPEN"
+    - name: Set Resource Quotas to a Namespace
+      condition: event.type == "ADDED"
       action:
-        run_playbook:
-          name: demos/dynatrace-demo/playbook.yml
+        run_job_template:
+          name: set-resource-quota-on-namespace
+          organization: Default
