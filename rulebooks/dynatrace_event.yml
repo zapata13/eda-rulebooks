@@ -16,6 +16,6 @@
       actions:
         - run_job_template:
             name: Dynatrace Easy Travel demo fix
-            organization: rhops
+            organization: Default
         - debug:
         - print_event:
