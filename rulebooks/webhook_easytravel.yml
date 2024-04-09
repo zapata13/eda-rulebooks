@@ -1,0 +1,24 @@
+---
+- name: Listen for events on a webhook
+  hosts: all
+  sources:
+    - ansible.eda.webhook:
+        host: 0.0.0.0
+        port: 5000
+  rules:
+    - name: Fix Easytravel
+      condition: event.payload.message == "Fix EasyTravel"
+      actions:
+        - run_job_template:
+            name: easytravel-fix
+            organization: Default
+        - debug:
+        - print_event:
+    - name: Break Easytravel
+      condition: event.payload.message == "Break EasyTravel"
+      actions:
+        - run_job_template:
+            name: easytravel-break
+            organization: Default
+        - debug:
+        - print_event:

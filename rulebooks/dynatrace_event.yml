@@ -15,7 +15,7 @@
       # condition: event.meta is defined
       actions:
         - run_job_template:
-            name: Dynatrace Easy Travel demo fix
+            name: easytravel-fix
             organization: Default
         - debug:
         - print_event:
