@@ -20,5 +20,8 @@
         - run_job_template:
             name: easytravel-break
             organization: Default
+            job_args:
+              extra_vars:
+                easytravel_url: '{{ et_url }}'
         - debug:
         - print_event:
