@@ -1,22 +1,25 @@
 ---
 - name: Listen for newly created services in AAP
   hosts: all
+  vars:
+    cluster_apps_domain: example.com
   sources:
     - sabre1041.eda.k8s:
         api_version: v1
         kind: Service
   rules:
     - name: Patch a Route for activation-job
-      condition:
-        - event.type == "ADDED"
-        - event.resource.metadata.namespace == "aap"
-        - event.resource.metadata.name is regex("activation-job-[0-9]+-[0-9]+-5000")
+      condition: >
+        '{{ event.resource.metadata.namespace }}' == "aap" and
+        '{{ event.type == "ADDED" }}' and
+        '{{ event.resource.metadata.name }}' is regex("activation-job-.*-5000")
       action:
         - debug:
         - print_event:
         - run_job_template:
-          name: publis-eda-rb-route
-          organization: Default
-      job_args:
-        extra_vars:
-          activation_job_name: '{{ event.resource.metadata.name }}'
+            name: publish-eda-rb-route
+            organization: Default
+            job_args:
+              extra_vars:
+                activation_job_name: '{{ event.resource.metadata.name }}'
+                url_suffix: '{{ cluster_apps_domain }}'
