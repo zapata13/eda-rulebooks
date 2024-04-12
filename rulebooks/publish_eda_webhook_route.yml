@@ -13,7 +13,7 @@
         '{{ event.resource.metadata.namespace }}' == "aap" and
         '{{ event.type == "ADDED" }}' and
         '{{ event.resource.metadata.name }}' is regex("activation-job-.*-5000")
-      action:
+      actions:
         - debug:
         - print_event:
         - run_job_template:
