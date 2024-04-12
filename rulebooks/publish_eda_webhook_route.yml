@@ -23,3 +23,4 @@
               extra_vars:
                 activation_job_name: '{{ event.resource.metadata.name }}'
                 url_suffix: '{{ cluster_apps_domain }}'
+                ns: '{{ ansible_eda.event.resource.metadata.name }}'
